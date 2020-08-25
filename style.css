@@ -1,0 +1,19 @@
+:root{
+    font-family: arial;
+}
+  
+#main{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(20vw, 1fr));
+    grid-gap: 5px;
+    justify-items: center;
+    align-items: center;
+}
+  
+p{
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
