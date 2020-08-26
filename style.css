@@ -2,6 +2,13 @@
     font-family: arial;
 }
   
+#newBook{
+    display: block;
+    margin: auto;
+    height: 50px;
+    width: 100px;
+}
+  
 #main{
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(20vw, 1fr));
@@ -15,5 +22,15 @@ p{
     text-align: center;
     display: flex;
     justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+  
+form{
+    margin-top: 15vh;
+    display: grid;
+    grid-template-columns: auto;
+    grid-gap: 15px;
+    justify-items: center;
     align-items: center;
 }
