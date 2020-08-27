@@ -10,20 +10,34 @@
 }
   
 #main{
+    margin: 7vh 3vw 0 3vw;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(20vw, 1fr));
-    grid-gap: 5px;
+    grid-template-columns: repeat(auto-fit, minmax(20vw, 1fr));
+    grid-gap: 3vw;
+    justify-items: center;
+    align-items: center;
+}
+  
+.bookDisplay{
+    padding: 10px;
+    display: grid;
+    grid-template-rows: auto auto;
     justify-items: center;
     align-items: center;
 }
   
 p{
-    padding: 20px;
+    padding: 5px 5px 0 5px;
     text-align: center;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+}
+  
+.remove{
+    margin-bottom: 5px;
+    align-self: end;
 }
   
 form{

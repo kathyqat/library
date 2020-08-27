@@ -20,50 +20,76 @@ function render(){
     myLibrary = myLibrary.sort((a, b) => (a.title > b.title) ? 1: -1);
     
     for (let i=0; i<myLibrary.length; i++){
-        const book = document.createElement('p');
-        const randomRColor = randomNum();
-        const randomGColor = randomNum();
-        const randomBColor = randomNum();
+        const bookDisplay = document.createElement('div');
+        bookDisplay.setAttribute('class', 'bookDisplay');
+        mainDiv.appendChild(bookDisplay);
         
-        book.style.backgroundColor = `rgb(${randomRColor}, ${randomGColor}, ${randomBColor})`;
+        const book = document.createElement('p');
         book.innerHTML = `<strong>${myLibrary[i].title}</strong> <br>
             ${myLibrary[i].author} <br>
             ${myLibrary[i].numOfPages} <br>
             ${myLibrary[i].status}`;
-        mainDiv.appendChild(book);
+        bookDisplay.appendChild(book);
+        
+        const removeBookButton = document.createElement('button');
+        removeBookButton.setAttribute('data-index', `${i}`);
+        removeBookButton.setAttribute('class', 'remove');
+        removeBookButton.setAttribute('type', 'button');
+        removeBookButton.textContent = 'Remove book';
+        bookDisplay.appendChild(removeBookButton);
+        removeBookButton.addEventListener('click', function(e){removeBook(e.target)});
+        
+        const randomRColor = randomNum();
+        const randomGColor = randomNum();
+        const randomBColor = randomNum();
+        bookDisplay.style.backgroundColor = `rgb(${randomRColor}, ${randomGColor}, ${randomBColor})`;
     };
-  
+    
     setEqualSize();
 }
-
+  
+render();
+  
+function removeBook(button){
+    const index = button.getAttribute('data-index');
+    myLibrary.splice(index, 1);
+    cleanDisplay();
+    render();
+}
+  
+function cleanDisplay(){
+    const cleanDisplay = document.querySelectorAll('.bookDisplay');
+    cleanDisplay.forEach((book) => {
+        mainDiv.removeChild(book);
+    });
+}
+  
 function randomNum(){
     return Math.floor(Math.random() * 255);
 }
-
+  
 function setEqualSize(){
-    const p = document.querySelectorAll('p');
+    const bookDisplay = document.querySelectorAll('.bookDisplay');
     let maxHeight = 0;
     let maxWidth = 0;
     
-    p.forEach((p) => {
-        if (p.clientHeight > maxHeight){
-            maxHeight = p.clientHeight;
+    bookDisplay.forEach((book) => {
+        if (book.clientHeight > maxHeight){
+            maxHeight = book.clientHeight;
         };
-        if (p.clientWidth > maxWidth){
-            maxWidth = p.clientWidth;
+        if (book.clientWidth > maxWidth){
+            maxWidth = book.clientWidth;
         };
     });
     
-    maxHeight = maxHeight - 40;
-    maxWidth = maxWidth - 40;
-    p.forEach((p) => {
-        p.style.height = `${maxHeight}px`;
-        p.style.width = `${maxWidth}px`;
+    maxHeight = maxHeight - 20;
+    maxWidth = maxWidth;
+    bookDisplay.forEach((book) => {
+        book.style.height = `${maxHeight}px`;
+        book.style.width = `${maxWidth}px`;
     });
 }
-
-render();
-
+  
 const newBookButton = document.querySelector('#newBook');
 newBookButton.addEventListener('click', () => {
     const form = document.querySelector('form');
@@ -72,13 +98,10 @@ newBookButton.addEventListener('click', () => {
         submitBookInfo();
     };
 });
-
+  
 function createForm(){
     mainDiv.removeAttribute('id', 'main');
-    const cleanBooks = document.querySelectorAll('p');
-    cleanBooks.forEach((book) => {
-        mainDiv.removeChild(book);
-    });
+    cleanDisplay();
     const form = document.createElement('form');
     mainDiv.appendChild(form);
     
@@ -96,7 +119,7 @@ function createForm(){
     submitButton.textContent = 'Submit';
     form.appendChild(submitButton);
 }
-
+  
 function submitBookInfo(){
     const submitButton = document.querySelector('#submit');
     submitButton.addEventListener('click', () => {
