@@ -1,6 +1,6 @@
 let myLibrary = [];
 const properties = ['author', 'title', 'numOfPages', 'status'];
-const placeholders = ['Author', 'Title', 'Number of Pages', 'Status'];
+const placeholders = ['Author', 'Title', 'Number of Pages', 'Read or Not Read'];
 const mainDiv = document.querySelector('#main');
 
 function Book(author, title, numOfPages, status){
@@ -8,6 +8,10 @@ function Book(author, title, numOfPages, status){
     this.title = title
     this.numOfPages = numOfPages
     this.status = status
+}
+
+Book.prototype.toggleReadStatus = function(){
+    this.status = (this.status == 'Read') ? 'Not Read' : 'Read' ;
 }
 
 function addBookToLibrary(author, title, numOfPages, status){
@@ -21,14 +25,15 @@ function render(){
     
     for (let i=0; i<myLibrary.length; i++){
         const bookDisplay = document.createElement('div');
+        bookDisplay.setAttribute('data-index', `${i}`);
         bookDisplay.setAttribute('class', 'bookDisplay');
         mainDiv.appendChild(bookDisplay);
         
         const book = document.createElement('p');
         book.innerHTML = `<strong>${myLibrary[i].title}</strong> <br>
-            ${myLibrary[i].author} <br>
-            ${myLibrary[i].numOfPages} <br>
-            ${myLibrary[i].status}`;
+            By: ${myLibrary[i].author} <br>
+            ${myLibrary[i].numOfPages} pg
+            <span>${myLibrary[i].status}</span>`;
         bookDisplay.appendChild(book);
         
         const removeBookButton = document.createElement('button');
@@ -38,6 +43,17 @@ function render(){
         removeBookButton.textContent = 'Remove book';
         bookDisplay.appendChild(removeBookButton);
         removeBookButton.addEventListener('click', function(e){removeBook(e.target)});
+        
+        const readStatusButton = document.createElement('button');
+        readStatusButton.setAttribute('class', 'status');
+        readStatusButton.setAttribute('type', 'button');
+        readStatusButton.textContent = 'Change read status';
+        bookDisplay.appendChild(readStatusButton);
+        readStatusButton.addEventListener('click', () => {
+            myLibrary[i].toggleReadStatus();
+            const status = document.querySelector(`div[data-index='${i}'] > p > span`);
+            status.textContent = myLibrary[i].status;
+        });
         
         const randomRColor = randomNum();
         const randomGColor = randomNum();
@@ -82,7 +98,7 @@ function setEqualSize(){
         };
     });
     
-    maxHeight = maxHeight - 20;
+    maxHeight = maxHeight - 15;
     maxWidth = maxWidth;
     bookDisplay.forEach((book) => {
         book.style.height = `${maxHeight}px`;

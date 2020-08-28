@@ -21,7 +21,7 @@
 .bookDisplay{
     padding: 10px;
     display: grid;
-    grid-template-rows: auto auto;
+    grid-template-rows: repeat(3, auto);
     justify-items: center;
     align-items: center;
 }
@@ -35,7 +35,7 @@ p{
     flex-direction: column;
 }
   
-.remove{
+.remove, .status{
     margin-bottom: 5px;
     align-self: end;
 }
