@@ -17,10 +17,27 @@ Book.prototype.toggleReadStatus = function(){
 function addBookToLibrary(author, title, numOfPages, status){
     const book = new Book(author, title, numOfPages, status);
     myLibrary.push(book);
+    saveToLocalStorage();
+}
+
+function saveToLocalStorage(){
+    let myLibraryString = JSON.stringify(myLibrary);
+    localStorage.setItem('myLibrary', myLibraryString);
+}
+
+function lookInLocalStorage(){
+    if ("myLibrary" in localStorage){
+        let myLibraryString = localStorage.getItem('myLibrary');
+        myLibrary = JSON.parse(myLibraryString);
+        for(let i=0; i<myLibrary.length; i++){
+            myLibrary[i].__proto__ = Object.create(Book.prototype);
+        };
+    };
 }
 
 function render(){
     mainDiv.setAttribute('id', 'main');
+    lookInLocalStorage();
     myLibrary = myLibrary.sort((a, b) => (a.title > b.title) ? 1: -1);
     
     for (let i=0; i<myLibrary.length; i++){
@@ -51,6 +68,7 @@ function render(){
         bookDisplay.appendChild(readStatusButton);
         readStatusButton.addEventListener('click', () => {
             myLibrary[i].toggleReadStatus();
+            saveToLocalStorage();
             const status = document.querySelector(`div[data-index='${i}'] > p > span`);
             status.textContent = myLibrary[i].status;
         });
@@ -69,6 +87,7 @@ render();
 function removeBook(button){
     const index = button.getAttribute('data-index');
     myLibrary.splice(index, 1);
+    saveToLocalStorage();
     cleanDisplay();
     render();
 }
